@@ -37,30 +37,23 @@ function renderTasks() {
 
   tasks.forEach(t => {
     const li = document.createElement("li");
-    li.className = "task-item";
 
     li.innerHTML = `
-      <div class="task-left">
-        <div class="check ${t.completed ? "done" : ""}"></div>
-        <span class="${t.completed ? "done-text" : ""}">
-          ${t.task}
-          <small>${t.subject}</small>
-        </span>
-      </div>
-      <div class="task-actions">
-        <button onclick="toggleTask(${t.id})">✔</button>
-        <button onclick="deleteTask(${t.id})">🗑</button>
-      </div>
+      <span style="text-decoration:${t.completed ? "line-through" : "none"}">
+        ${t.task} (${t.subject})
+      </span>
+      <button onclick="toggleTask(${t.id})">✔</button>
+      <button onclick="deleteTask(${t.id})">🗑</button>
     `;
 
     taskList.appendChild(li);
   });
 
+  // progress bar
   const completed = tasks.filter(t => t.completed).length;
   const percent = tasks.length ? (completed / tasks.length) * 100 : 0;
   progressBar.style.width = percent + "%";
 }
-
 
 function toggleTask(id) {
   tasks = tasks.map(t =>

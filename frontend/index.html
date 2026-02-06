@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StudySprint</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <h1>StudySprint 🚀</h1>
+    <p>Plan. Focus. Achieve.</p>
+  </header>
+
+  <!-- Add Task -->
+  <section class="card">
+    <h2>Add Study Task</h2>
+    <input type="text" id="taskInput" placeholder="Enter task name" />
+    
+    <select id="subjectInput">
+      <option value="">Select subject</option>
+      <option>Math</option>
+      <option>DSA</option>
+      <option>DBMS</option>
+      <option>OS</option>
+    </select>
+
+    <button id="addTaskBtn">Add Task</button>
+  </section>
+
+  <!-- Task List -->
+  <section class="card">
+    <h2>Today's Tasks</h2>
+    <ul id="taskList"></ul>
+  </section>
+
+  <!-- Pomodoro Timer -->
+  <section class="card timer">
+    <h2>Pomodoro Timer</h2>
+    <div id="time">25:00</div>
+
+    <div class="timer-buttons">
+      <button id="startBtn">Start</button>
+      <button id="pauseBtn">Pause</button>
+      <button id="resetBtn">Reset</button>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>

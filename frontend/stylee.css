@@ -1,191 +1,102 @@
+:root {
+  --primary: #4f6cff;
+  --bg: #eef1ff;
+  --card: #ffffff;
+  --text: #1e1e1e;
+  --muted: #6b6b6b;
+}
+.card,
+.card h2,
+.card span,
+.card small,
+input,
+select {
+  color: var(--card-text);
+}
+
+/* RESET */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Poppins", "Segoe UI", sans-serif;
 }
 
+/* BODY */
 body {
-  background: #f4f6fb;
-  padding: 20px;
+  background: var(--bg);
+  color: var(--text);
+  padding: 14px;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-header {
+/* HERO */
+.hero {
+  background: var(--primary);
+  color: white;
+  padding: 26px 16px;
+  border-radius: 18px;
   text-align: center;
-  margin-bottom: 20px;
-}
-
-header h1 {
-  font-size: 2rem;
-  color: #3b5cff;
-}
-
-header p {
-  color: #555;
-}
-
-.card {
-  background: white;
-  border-radius: 20px;
-  padding: 18px;
   margin-bottom: 22px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 40px rgba(0,0,0,0.1);
+/* THEME PICKER */
+.theme-picker {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  align-items: center;
 }
 
+/* CARDS */
+.card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 18px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
 
+/* INPUTS */
 input, select {
   width: 100%;
-  padding: 10px;
+  padding: 11px;
   margin-bottom: 10px;
-  border-radius: 8px;
+  border-radius: 10px;
   border: 1px solid #ccc;
+  background: white;
 }
 
+/* BUTTONS */
 button {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
+  border-radius: 10px;
   border: none;
-  border-radius: 8px;
-  background: #3b5cff;
-  color: #fff;
+  background: var(--primary);
+  color: white;
   font-size: 1rem;
   cursor: pointer;
-}
-
-button:hover {
-  background: #2f4de0;
-}
-
-ul {
-  list-style: none;
-}
-
-li {
-  background: #f1f3ff;
-  padding: 10px;
-  border-radius: 8px;
-  margin-bottom: 8px;
-}
-
-.timer {
-  text-align: center;
-}
-
-#time {
-  font-size: 3rem;
-  margin: 15px 0;
-}
-
-.timer-buttons button {
-  margin-bottom: 8px;
-}
-/* Dark Mode */
-body.dark {
-  background: #121212;
-  color: #fff;
-}
-
-body.dark .card {
-  background: #1e1e1e;
-  color: #fff;
-}
-
-body.dark input,
-body.dark select {
-  background: #2a2a2a;
-  color: #fff;
-  border: 1px solid #444;
-}
-
-body.dark button {
-  background: #5865f2;
-}
-
-#darkToggle {
-  margin-top: 10px;
-  background: transparent;
-  color: #3b5cff;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-}
-.hidden {
-  display: none;
-}
-.card {
-  animation: fadeIn 0.6s ease;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 button:active {
   transform: scale(0.97);
 }
 
-#time {
-  transition: transform 0.3s ease;
+/* TASK LIST */
+ul {
+  list-style: none;
 }
 
-.running {
-  transform: scale(1.05);
-}
-.hero {
-  background: linear-gradient(135deg, #3b5cff, #7c8bff);
-  color: white;
-  padding: 30px 20px;
-  border-radius: 20px;
-  text-align: center;
-  margin-bottom: 25px;
-}
-
-.hero h1 {
-  font-size: 2.2rem;
-  margin-bottom: 8px;
-}
-
-.hero p {
-  opacity: 0.9;
-}
 .task-item {
+  background: var(--bg);
+  padding: 12px;
+  border-radius: 12px;
+  margin-bottom: 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #f4f6fb;
-  padding: 12px;
-  border-radius: 14px;
-  margin-bottom: 10px;
-}
-
-.task-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.check {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: 2px solid #3b5cff;
-}
-
-.check.done {
-  background: #3b5cff;
 }
 
 .done-text {
@@ -193,8 +104,45 @@ button:active {
   opacity: 0.6;
 }
 
-.task-left small {
-  display: block;
-  font-size: 0.75rem;
-  opacity: 0.6;
+/* PROGRESS */
+.progress {
+  height: 8px;
+  background: #ccc;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+#progressBar {
+  height: 100%;
+  background: var(--primary);
+  border-radius: 8px;
+}
+
+/* TIMER */
+.timer {
+  text-align: center;
+}
+
+#time {
+  font-size: 3rem;
+  margin: 14px 0;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+
+  .hero h1 {
+    font-size: 1.6rem;
+  }
+
+  .card {
+    padding: 14px;
+  }
+
+  #time {
+    font-size: 2.6rem;
+  }
 }

@@ -1,55 +1,99 @@
-/* ---------------- TASK LOGIC ---------------- */
+/* =========================================================
+   ACCESSIBLE GLOBAL THEME (FIXED – NO DUPLICATES)
+   ========================================================= */
 
-const addTaskBtn = document.getElementById("addTaskBtn");
+const themePicker = document.getElementById("themeColor");
+const DEFAULT_THEME = "#4f6cff";
+
+/* Convert hex → RGB */
+function hexToRgb(hex) {
+  const bigint = parseInt(hex.slice(1), 16);
+  return {
+    r: (bigint >> 16) & 255,
+    g: (bigint >> 8) & 255,
+    b: bigint & 255
+  };
+}
+
+/* Calculate luminance */
+function getLuminance({ r, g, b }) {
+  return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+}
+
+function setTheme(color) {
+  const rgb = hexToRgb(color);
+  const luminance = getLuminance(rgb);
+
+  const textColor = luminance < 0.55 ? "#ffffff" : "#1e1e1e";
+
+  document.documentElement.style.setProperty("--primary", color);
+  document.documentElement.style.setProperty("--bg", color + "22");
+  document.documentElement.style.setProperty("--text", textColor);
+  document.documentElement.style.setProperty("--card-text", "#1e1e1e");
+}
+
+/* 🔥 APPLY THEME ON LOAD (ONLY ONCE) */
+const savedTheme = localStorage.getItem("theme") || DEFAULT_THEME;
+setTheme(savedTheme);
+themePicker.value = savedTheme;
+
+/* Listen for user changes */
+themePicker.addEventListener("input", (e) => {
+  const color = e.target.value;
+  setTheme(color);
+  localStorage.setItem("theme", color);
+});
+
+/* =========================================================
+   TASK MANAGEMENT
+   ========================================================= */
+
 const taskInput = document.getElementById("taskInput");
 const subjectInput = document.getElementById("subjectInput");
+const addTaskBtn = document.getElementById("addTaskBtn");
 const taskList = document.getElementById("taskList");
 const progressBar = document.getElementById("progressBar");
 
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
 addTaskBtn.addEventListener("click", () => {
-  const task = taskInput.value;
-  const subject = subjectInput.value;
-
-  if (task === "" || subject === "") {
-    alert("Please enter task and subject");
-    return;
-  }
+  if (!taskInput.value || !subjectInput.value) return;
 
   const newTask = {
     id: Date.now(),
-    task,
-    subject,
+    text: taskInput.value,
+    subject: subjectInput.value,
     completed: false
   };
 
   tasks.push(newTask);
   localStorage.setItem("tasks", JSON.stringify(tasks));
-  renderTasks();
-
   taskInput.value = "";
   subjectInput.value = "";
+  renderTasks();
 });
 
 function renderTasks() {
   taskList.innerHTML = "";
 
-  tasks.forEach(t => {
+  tasks.forEach(task => {
     const li = document.createElement("li");
+    li.className = "task-item";
 
     li.innerHTML = `
-      <span style="text-decoration:${t.completed ? "line-through" : "none"}">
-        ${t.task} (${t.subject})
+      <span class="${task.completed ? "done-text" : ""}">
+        ${task.text} <small>(${task.subject})</small>
       </span>
-      <button onclick="toggleTask(${t.id})">✔</button>
-      <button onclick="deleteTask(${t.id})">🗑</button>
+      <div>
+        <button onclick="toggleTask(${task.id})">✔</button>
+        <button onclick="deleteTask(${task.id})">🗑</button>
+      </div>
     `;
 
     taskList.appendChild(li);
   });
 
-  // progress bar
+  // Progress bar
   const completed = tasks.filter(t => t.completed).length;
   const percent = tasks.length ? (completed / tasks.length) * 100 : 0;
   progressBar.style.width = percent + "%";
@@ -71,10 +115,12 @@ function deleteTask(id) {
 
 renderTasks();
 
-/* ---------------- POMODORO + FOCUS MODE + ANIMATION ---------------- */
+/* =========================================================
+   POMODORO TIMER + FOCUS MODE
+   ========================================================= */
 
-let time = 1500;
-let timer;
+let time = 1500; // 25 min
+let timer = null;
 let running = false;
 
 const timeDisplay = document.getElementById("time");
@@ -84,54 +130,46 @@ const resetBtn = document.getElementById("resetBtn");
 const taskSection = document.getElementById("taskSection");
 
 function updateTime() {
-  const minutes = Math.floor(time / 60);
-  const seconds = time % 60;
-  timeDisplay.textContent = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  const m = Math.floor(time / 60);
+  const s = time % 60;
+  timeDisplay.textContent = `${m}:${s < 10 ? "0" : ""}${s}`;
 }
 
 startBtn.addEventListener("click", () => {
-  if (!running) {
-    running = true;
+  if (running) return;
+  running = true;
 
-    // 🔥 FOCUS MODE ON
-    taskSection.classList.add("hidden");
+  // Focus mode ON
+  taskSection.classList.add("hidden");
 
-    // 🔥 TIMER ANIMATION ON
-    timeDisplay.classList.add("running");
-
-    timer = setInterval(() => {
-      if (time > 0) {
-        time--;
-        updateTime();
-      } else {
-        clearInterval(timer);
-        alert("Time's up! Take a break 😌");
-
-        // restore UI
-        taskSection.classList.remove("hidden");
-        timeDisplay.classList.remove("running");
-        running = false;
-      }
-    }, 1000);
-  }
+  timer = setInterval(() => {
+    if (time > 0) {
+      time--;
+      updateTime();
+    } else {
+      clearInterval(timer);
+      alert("Focus session complete 🎉");
+      resetPomodoro();
+    }
+  }, 1000);
 });
 
 pauseBtn.addEventListener("click", () => {
-  running = false;
   clearInterval(timer);
-
-  // restore UI
+  running = false;
   taskSection.classList.remove("hidden");
-  timeDisplay.classList.remove("running");
 });
 
 resetBtn.addEventListener("click", () => {
-  running = false;
+  resetPomodoro();
+});
+
+function resetPomodoro() {
   clearInterval(timer);
+  running = false;
   time = 1500;
   updateTime();
-
-  // restore UI
   taskSection.classList.remove("hidden");
-  timeDisplay.classList.remove("running");
-});
+}
+
+updateTime();
